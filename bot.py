@@ -13,7 +13,6 @@ async def handler(update, context):
     text = update.message.text
     await update.message.reply_text(f"{text}")
 
-port = int(os.environ.get("PORT", 10000))
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(MessageHandler(filters.TEXT, handler))
 app.run_polling()
