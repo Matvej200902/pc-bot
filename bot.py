@@ -16,7 +16,7 @@ async def handler(update, context):
 port = int(os.environ.get("PORT", 10000))
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(MessageHandler(filters.TEXT, handler))
-app.run.polling()
+app.run_polling()
 
 keyboard = [
     ["🟢 Включить ПК", "🌙 Сон"],
