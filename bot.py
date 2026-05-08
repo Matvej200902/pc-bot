@@ -3,6 +3,22 @@ from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filte
 from wakeonlan import send_magic_packet
 import paramiko
 import os
+from http.server import BaseHTTPRequestHadler, HTTPServer
+import threading
+
+def keep_alive():
+    port = int(os.environ.get("PORT", 10000))
+
+    class Handler(BaseHTTPRequestHadler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"OK")
+        
+    server = HTTPServer(("0.0.0.0", port), Handler)
+    server.serve_forever()
+
+threading.Thread(target=keep_alive, daemon=True).start()
 
 TOKEN = os.getenv("TOKEN")
 MAC = os.getenv("MAC")
