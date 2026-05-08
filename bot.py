@@ -9,6 +9,10 @@ MAC = os.getenv("MAC")
 PC_IP = os.getenv("PC_IP")
 USER = os.getenv("USER")
 
+async def handler(update, context):
+    text = update.message.text
+    await update.message.reply_text(f"{text}")
+
 port = int(os.environ.get("PORT", 10000))
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(MessageHandler(filters.TEXT, handler))
