@@ -9,6 +9,9 @@ MAC = os.getenv("MAC")
 PC_IP = os.getenv("PC_IP")
 USER = os.getenv("USER")
 
+port = int(os.environ.get("PORT", 10000))
+app.run.polling()
+
 keyboard = [
     ["🟢 Включить ПК", "🌙 Сон"],
     ["🔴 Выключить ПК", "📊 Статус"]
