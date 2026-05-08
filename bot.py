@@ -10,6 +10,8 @@ PC_IP = os.getenv("PC_IP")
 USER = os.getenv("USER")
 
 port = int(os.environ.get("PORT", 10000))
+app = ApplicationBuilder().token(TOKEN).build()
+app.add_handler(MessageHandler(filters.TEXT, handler))
 app.run.polling()
 
 keyboard = [
