@@ -4,10 +4,10 @@ from wakeonlan import send_magic_packet
 import paramiko
 import os
 
-TOKEN = os.getenv("8291688643:AAH3vPtYTn-9-P_fhxcHMz6Cd6ayMde3Fbc")
-MAC = os.getenv("9c:6b:00:89:23:f4")
-PC_IP = os.getenv("100.81.6.40")
-USER = os.getenv("tabtabur")
+TOKEN = os.getenv("TOKEN")
+MAC = os.getenv("MAC")
+PC_IP = os.getenv("PC_IP")
+USER = os.getenv("USER")
 
 keyboard = [
     ["🟢 Включить ПК", "🌙 Сон"],
