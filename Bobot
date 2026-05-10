@@ -1,0 +1,72 @@
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import ApplicationBuilder, CallbackQueryHandler, CommandHandler, ContextTypes
+from wakeonlan import send_magic_packet
+import paramiko
+import os
+import subprocess
+
+TOKEN = os.getenv("BOT_TOKEN")
+
+ADMIN_USERNAME = "ТВОЙ_ЮЗЕРНЕЙМ_БЕЗ_@"
+
+PC_MAC = "MAC_ПК"
+PC_IP = "IP_ПК"
+PC_USER = "USER_ПК"
+PC_PASS = "PASS_ПК"
+
+def is_pc_online():
+    result = subprocess.run(["ping", "-c", "1", PC_IP], stdout=subprocess.DEVNULL)
+    return result.returncode == 0
+
+def is_admin(update: Update):
+    return update.effective_user.username == ADMIN_USERNAME
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not is_admin(update):
+        await update.message.reply_text("Нет доступа")
+        return
+
+    keyboard = [
+        [InlineKeyboardButton("🔌 Включить ПК", callback_data='on')],
+        [InlineKeyboardButton("⛔ Выключить ПК", callback_data='off')],
+        [InlineKeyboardButton("📊 Статус ПК", callback_data='status')],
+    ]
+
+    await update.message.reply_text(
+        "Управление ПК:",
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
+async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    if not is_admin(update):
+        await query.edit_message_text("Нет доступа")
+        return
+
+    if query.data == 'on':
+        send_magic_packet(PC_MAC)
+        await query.edit_message_text("WoL сигнал отправлен")
+
+    elif query.data == 'off':
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(PC_IP, username=PC_USER, password=PC_PASS)
+            ssh.exec_command("shutdown now")
+            ssh.close()
+            await query.edit_message_text("ПК выключается")
+        except Exception as e:
+            await query.edit_message_text(f"Ошибка SSH: {e}")
+
+    elif query.data == 'status':
+        if is_pc_online():
+            await query.edit_message_text("ПК ВКЛЮЧЕН 🟢")
+        else:
+            await query.edit_message_text("ПК ВЫКЛЮЧЕН 🔴")
+
+app = ApplicationBuilder().token(TOKEN).build()
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CallbackQueryHandler(buttons))
+app.run_polling()
