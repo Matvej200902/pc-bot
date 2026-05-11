@@ -1,1 +1,16 @@
-8663687450:AAFLmGemmuU0o7XwVrKBXK_-DsA30Lfx4xY
+None
+Traceback (most recent call last):
+  File "/home/tabtabur/pcbot/bot.py", line 70, in <module>
+    app = ApplicationBuilder().token(TOKEN).build()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tabtabur/pcbot/venv/lib/python3.11/site-packages/telegram/ext/_applicationbuilder.py", line 309, in build
+    bot: Bot = self._build_ext_bot()  # build a bot
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tabtabur/pcbot/venv/lib/python3.11/site-packages/telegram/ext/_applicationbuilder.py", line 271, in _build_ext_bot
+    return ExtBot(
+           ^^^^^^^
+  File "/home/tabtabur/pcbot/venv/lib/python3.11/site-packages/telegram/ext/_extbot.py", line 244, in __init__
+    super().__init__(
+  File "/home/tabtabur/pcbot/venv/lib/python3.11/site-packages/telegram/_bot.py", line 329, in __init__
+    raise InvalidToken("You must pass the token you received from https://t.me/Botfather!")
+telegram.error.InvalidToken: You must pass the token you received from https://t.me/Botfather!
